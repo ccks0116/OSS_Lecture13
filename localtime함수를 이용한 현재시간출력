@@ -1,1 +1,11 @@
-#include <stdio.h>#include <time.h>void main(){ struct tm *t; time_t timer; timer = time(NULL); t = localtime(&timer); printf("%d:%d:%d\n", t->tm_hour, t->tm_min, t->tm_sec);}
+#include <stdio.h>
+#include <time.h>
+
+void main()
+{
+  struct tm *t;
+  time_t timer;
+  timer = time(NULL);
+  t = localtime(&timer);
+  printf("%d:%d:%d\n", t->tm_hour, t->tm_min, t->tm_sec);
+}
