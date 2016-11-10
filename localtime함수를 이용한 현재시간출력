@@ -15,7 +15,7 @@ int s = 0, m = 0, h = 0;
 int state = NULL;
 
 int main()
-{	
+{
 	while (1) {
 		system("cls");
 		if (_kbhit() != 0) //키보드 버퍼값이 있으면 반복문을 빠져나옴
@@ -25,12 +25,12 @@ int main()
 				break;
 			}
 		}
-	
+
 		elpTime();
 		pTime();
 		printf("숫자키 입력\n1.종료");
 		Sleep(50);
-		
+
 	}
 
 	system("pause");
@@ -38,13 +38,12 @@ int main()
 }
 
 void elpTime() {		//elapse time 경과시간
-		c = clock() / 1000; //clock()는 1/1000초를 반환하므로 1초로 단위 변경
-		s = c % 60; 
-		m = c / 60;
-		h = c / 3600;
-				
-		printf("경과시간 %.2d:%.2d:%.2d\n", h, m, s);
-			
+	c = clock() / 10; //clock()는 1/1000초를 반환하므로 1초로 단위 변경
+	m = (c / 60) % 60;
+	h = c / 3600;
+
+	printf("경과시간 %.2d:%.2d\n", h, m);
+
 }
 
 void pTime() {	//present time 현재시간
@@ -52,5 +51,5 @@ void pTime() {	//present time 현재시간
 	time_t timer;
 	timer = time(NULL);
 	t = localtime(&timer);
-	printf("현재시간 %.2d:%.2d:%.2d\n", t->tm_hour, t->tm_min, t->tm_sec);
+	printf("현재시간 %.2d:%.2d\n", t->tm_hour, t->tm_min);
 }
