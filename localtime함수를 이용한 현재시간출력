@@ -9,26 +9,25 @@
 
 void elpTime();
 void pTime();
+void keyListener();
 
-int c = 0;
-int s = 0, m = 0, h = 0;
-int state = NULL;
+int c = 0; //clock()로 받은 값을 저장
+int m = 0, h = 0; // 분, 시
+int state = NULL; // 키입력 상태
+int endProgram = 1; //프로그램 종료
+
+#define ESC 27
 
 int main()
 {
-	while (1) {
+	system("mode con:cols=20 lines=5");// con:cols=50 : 가로 길 lines=20 : 세로 길
+	
+	while (endProgram) {
 		system("cls");
-		if (_kbhit() != 0) //키보드 버퍼값이 있으면 반복문을 빠져나옴
-		{
-			state = getch();
-			if (state = '1'){
-				break;
-			}
-		}
-
+		keyListener();
 		elpTime();
 		pTime();
-		printf("숫자키 입력\n1.종료");
+		printf("0 도움말, ESC 종료.\n");		
 		Sleep(50);
 
 	}
@@ -52,4 +51,38 @@ void pTime() {	//present time 현재시간
 	timer = time(NULL);
 	t = localtime(&timer);
 	printf("현재시간 %.2d:%.2d\n", t->tm_hour, t->tm_min);
+}
+
+void keyListener() {
+	if (_kbhit() != 0) //키보드 버퍼값이 있으면 반복문을 빠져나옴
+	{
+		state = getch();
+		switch (state) {
+		case ESC:
+			printf("5초후 종료합니다.\n");
+			Sleep(5000);
+			endProgram = 0;
+			break;
+		case '0':
+			system("mode con:cols=30 lines=20");
+			printf("1. 알람시간 설정\n2. 뽀모도르 시간관리\n3. 메세지 알람\nESC. 이전\n");
+			state = getch();
+			switch (state) {
+			case ESC:
+				break;
+			case '1':
+				//setAlarm();
+				break;
+			case '2':
+				//pomodoro();
+				break;
+			case '3':
+				//messgeAlarm();
+				break;
+			}
+			system("mode con:cols=20 lines=5");
+			break;
+		}
+	}
+		
 }
