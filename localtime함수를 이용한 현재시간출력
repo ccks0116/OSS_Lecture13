@@ -10,24 +10,27 @@
 void elpTime();
 void pTime();
 void keyListener();
+void setAlarm();
 
 int c = 0; //clock()로 받은 값을 저장
-int m = 0, h = 0; // 분, 시
+int m = 0, h = 0; // 경괴시간 분, 시
 int state = NULL; // 키입력 상태
 int endProgram = 1; //프로그램 종료
+
+int alarm= 3600;// 초로 환산한 알람시간
 
 #define ESC 27
 
 int main()
 {
 	system("mode con:cols=20 lines=5");// con:cols=50 : 가로 길 lines=20 : 세로 길
-	
+
 	while (endProgram) {
 		system("cls");
 		keyListener();
 		elpTime();
 		pTime();
-		printf("0 도움말, ESC 종료.\n");		
+		printf("0 도움말, ESC 종료.\n");
 		Sleep(50);
 
 	}
@@ -37,9 +40,21 @@ int main()
 }
 
 void elpTime() {		//elapse time 경과시간
-	c = clock() / 10; //clock()는 1/1000초를 반환하므로 1초로 단위 변경
+	c = clock() / 100; //clock()는 1/1000초를 반환하므로 1초로 단위 변경
 	m = (c / 60) % 60;
 	h = c / 3600;
+	if ((c % alarm) == 0) { //알람시간이 되면 비프음 출력
+		printf("아무키 입력시 종료\n");
+		for (int i = 0; i < 5; i++){
+			Beep(262, 100);
+			Beep(330, 100);
+			Beep(392, 100);
+			Beep(524, 100);
+			if (_kbhit() != 0) {
+				break;
+			}
+		}
+	}
 
 	printf("경과시간 %.2d:%.2d\n", h, m);
 
@@ -64,14 +79,14 @@ void keyListener() {
 			endProgram = 0;
 			break;
 		case '0':
-			system("mode con:cols=30 lines=20");
+			system("mode con:cols=50 lines=20");
 			printf("1. 알람시간 설정\n2. 뽀모도르 시간관리\n3. 메세지 알람\nESC. 이전\n");
 			state = getch();
 			switch (state) {
 			case ESC:
 				break;
 			case '1':
-				//setAlarm();
+				setAlarm();
 				break;
 			case '2':
 				//pomodoro();
@@ -84,5 +99,39 @@ void keyListener() {
 			break;
 		}
 	}
-		
+
+}
+
+void setAlarm() {
+	int alarmH = 0, alarmM = 01; // 알람시간 시, 분
+	system("cls");
+	printf("알람 설정 메뉴입니다.(기본 1시간마다 알람)\n");
+	printf("----------------------\n");
+	while (1){
+		while (1){
+			printf("시간을 설정해 주십시오( 0 ~ 24 )\n");
+			scanf("%d",&alarmH) ;
+			if (alarmH > 24) {
+				printf("24시를 넘을 수 없습니다.\n");
+				continue;
+			}
+			break;
+		}
+		while (1){
+			printf("분을 설정해 주십시오( 0 ~ 59 )\n");
+			scanf("%d", &alarmM);
+			if (alarmH > 59) {
+				printf("59분를 넘을 수 없습니다.\n");
+				continue;
+			}
+			break;
+		}
+		alarm = (alarmH * 3600) + (alarmM * 60);
+		if (alarm == 0) {
+			printf("시간을 다시설정 하세요.\n");
+			continue;
+		}
+		break;
+	}
+
 }
