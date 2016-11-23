@@ -11,6 +11,8 @@ void elpTime();
 void pTime();
 void keyListener();
 void setAlarm();
+void writeData(int data, int clock);
+void readData();
 
 int c = 0; //clock()로 받은 값을 저장
 int m = 0, h = 0; // 경괴시간 분, 시
@@ -35,7 +37,7 @@ int main()
 
 	}
 
-	system("pause");
+	writeData(time(NULL), c); //시간값 저장
 	return 0;
 }
 
@@ -74,13 +76,12 @@ void keyListener() {
 		state = getch();
 		switch (state) {
 		case ESC:
-			printf("5초후 종료합니다.\n");
-			Sleep(5000);
+			printf("종료합니다.\n");
 			endProgram = 0;
 			break;
 		case '0':
 			system("mode con:cols=50 lines=20");
-			printf("1. 알람시간 설정\n2. 뽀모도르 시간관리\n3. 메세지 알람\nESC. 이전\n");
+			printf("1. 알람시간 설정\n2. 뽀모도르 시간관리\n3. 컴퓨터 사용량 확인\nESC. 이전\n");
 			state = getch();
 			switch (state) {
 			case ESC:
@@ -92,7 +93,7 @@ void keyListener() {
 				//pomodoro();
 				break;
 			case '3':
-				//messgeAlarm();
+				readData();
 				break;
 			}
 			system("mode con:cols=20 lines=5");
@@ -108,7 +109,7 @@ void setAlarm() {
 	printf("알람 설정 메뉴입니다.(기본 1시간마다 알람)\n");
 	printf("----------------------\n");
 	while (1){
-		while (1){
+		while (1){  //알람 시 설정
 			printf("시간을 설정해 주십시오( 0 ~ 24 )\n");
 			scanf("%d",&alarmH) ;
 			if (alarmH > 24) {
@@ -117,7 +118,7 @@ void setAlarm() {
 			}
 			break;
 		}
-		while (1){
+		while (1){ // 알람 분 설정
 			printf("분을 설정해 주십시오( 0 ~ 59 )\n");
 			scanf("%d", &alarmM);
 			if (alarmH > 59) {
@@ -126,12 +127,42 @@ void setAlarm() {
 			}
 			break;
 		}
-		alarm = (alarmH * 3600) + (alarmM * 60);
-		if (alarm == 0) {
+		alarm = (alarmH * 3600) + (alarmM * 60); //시, 분을 초단위로 변환 하여 alarm에 저장
+		if (alarm == 0) {  //0시 0분일 때를 방지
 			printf("시간을 다시설정 하세요.\n");
 			continue;
 		}
 		break;
 	}
 
+}
+
+void writeData(int data, int clock) { //시간 기록을 파일 입출력으로 저장
+	FILE * fp;
+	if ((fp = fopen("Log.txt", "a")) == NULL) {
+		printf("파일을 열 수 없습니다.\n");
+		return;
+	}
+
+	fprintf(fp, "%d %d \n", data, clock);
+	fclose(fp);
+}
+
+void readData() { //시간기록을 log.txt에서 읽어 들임
+	FILE * fp;
+	time_t time;
+	int dayData, elaData;
+
+	system("cls");
+	if ((fp = fopen("Log.txt", "r")) == NULL) {
+		printf("파일을 열 수 없습니다.\n");
+		return;
+	}
+
+	while (fscanf(fp, "%d %d", &dayData, &elaData) != EOF){
+		
+		printf("%d %d \n", dayData, elaData);
+	}
+	printf("아무키나 누르시오\n");
+	getch();
 }
