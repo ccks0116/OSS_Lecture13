@@ -11,15 +11,22 @@ void elpTime();
 void pTime();
 void keyListener();
 void setAlarm();
-void writeData(int data, int clock);
+void writeData();
 void readData();
+
+typedef struct SaveTime {  //구조체단위로 파일입출력함
+	int date;
+	int elaTime;
+}saveTime;
 
 int c = 0; //clock()로 받은 값을 저장
 int m = 0, h = 0; // 경괴시간 분, 시
 int state = NULL; // 키입력 상태
 int endProgram = 1; //프로그램 종료
 
-int alarm= 3600;// 초로 환산한 알람시간
+int alarm = 3600;// 초로 환산한 알람시간
+
+
 
 #define ESC 27
 
@@ -37,7 +44,7 @@ int main()
 
 	}
 
-	writeData(time(NULL), c); //시간값 저장
+	writeData(); //시간값 저장
 	return 0;
 }
 
@@ -111,7 +118,7 @@ void setAlarm() {
 	while (1){
 		while (1){  //알람 시 설정
 			printf("시간을 설정해 주십시오( 0 ~ 24 )\n");
-			scanf("%d",&alarmH) ;
+			scanf("%d", &alarmH);
 			if (alarmH > 24) {
 				printf("24시를 넘을 수 없습니다.\n");
 				continue;
@@ -137,31 +144,42 @@ void setAlarm() {
 
 }
 
-void writeData(int data, int clock) { //시간 기록을 파일 입출력으로 저장
+void writeData() { //시간 기록을 파일 입출력으로 저장
 	FILE * fp;
+
 	if ((fp = fopen("Log.txt", "a")) == NULL) {
 		printf("파일을 열 수 없습니다.\n");
 		return;
 	}
-
-	fprintf(fp, "%d %d \n", data, clock);
+	saveTime save;
+	save.date = time(NULL);
+	save.elaTime = clock();
+	fwrite(&save, sizeof(saveTime), 1, fp);
 	fclose(fp);
 }
 
 void readData() { //시간기록을 log.txt에서 읽어 들임
 	FILE * fp;
-	time_t time;
-	int dayData, elaData;
 
-	system("cls");
 	if ((fp = fopen("Log.txt", "r")) == NULL) {
 		printf("파일을 열 수 없습니다.\n");
+		getch();
 		return;
 	}
 
-	while (fscanf(fp, "%d %d", &dayData, &elaData) != EOF){
-		
-		printf("%d %d \n", dayData, elaData);
+	saveTime read;
+	struct tm * t;
+	time_t timmer;
+
+	for (int i = 1; i <= 7; i++){
+
+		fseek(fp, -i*sizeof(saveTime), SEEK_END);
+		fread(&read, sizeof(saveTime), 1, fp);
+		timmer = (time_t)read.date;
+		t = localtime(&timmer);
+		printf("%d일 %d분\n", t->tm_mday, read.elaTime);
+		if (ftell(fp) == sizeof(saveTime))
+			break;
 	}
 	printf("아무키나 누르시오\n");
 	getch();
