@@ -13,6 +13,7 @@ void keyListener();
 void setAlarm();
 void writeData();
 void readData();
+void statistics();
 
 typedef struct SaveTime {  //구조체단위로 파일입출력함
 	int date;
@@ -97,7 +98,7 @@ void keyListener() {
 				setAlarm();
 				break;
 			case '2':
-				//pomodoro();
+				statistics();
 				break;
 			case '3':
 				readData();
@@ -151,15 +152,44 @@ void writeData() { //시간 기록을 파일 입출력으로 저장
 		printf("파일을 열 수 없습니다.\n");
 		return;
 	}
-	saveTime save;
-	save.date = time(NULL);
-	save.elaTime = clock();
+	saveTime save; //구조체 단위로 저장하기위함 
+	save.date = time(NULL); //saveTime 속성 double date
+	save.elaTime = clock(); // int elaTime
 	fwrite(&save, sizeof(saveTime), 1, fp);
 	fclose(fp);
 }
 
 void readData() { //시간기록을 log.txt에서 읽어 들임
 	FILE * fp;
+
+	if ((fp = fopen("Log.txt", "r")) == NULL) {
+		printf("파일을 열 수 없습니다.\n처음 실행 시켰다면 프로그램 종료후 로그파일이 생성됩니다\n");
+		getch();
+		return;
+	}
+
+	saveTime read;
+	struct tm * t;
+	time_t timmer;
+	
+
+	for (int i = 1; ; i++){
+		fseek(fp, -i*sizeof(saveTime), SEEK_END); //Log.txt의 제의 뒷부분부터 구조체saveTime 단위만큼 뒤로 건너뜀
+		fread(&read, sizeof(saveTime), 1, fp);
+		timmer = (time_t)read.date;
+		t = localtime(&timmer);
+		printf("%d일 %d분\n", t->tm_mday, read.elaTime); //log파일이 비어있을때 에러가 난다 수정필요
+		if (ftell(fp) == sizeof(saveTime)) //파일 포인터가 앞부분에 도착하면 루프 종료
+			break;
+	}
+	printf("아무키나 누르시오\n");
+	getch();
+}
+
+void statistics() { //사용시간을 통계내는 함수 간략화가 필요하다
+	FILE * fp;
+	int sum = 0;
+	int avg = 0;
 
 	if ((fp = fopen("Log.txt", "r")) == NULL) {
 		printf("파일을 열 수 없습니다.\n");
@@ -170,17 +200,17 @@ void readData() { //시간기록을 log.txt에서 읽어 들임
 	saveTime read;
 	struct tm * t;
 	time_t timmer;
-
+	int count = 0;
 	for (int i = 1; i <= 7; i++){
 
-		fseek(fp, -i*sizeof(saveTime), SEEK_END);
+		fseek(fp, -i*sizeof(saveTime), SEEK_END); 
 		fread(&read, sizeof(saveTime), 1, fp);
-		timmer = (time_t)read.date;
-		t = localtime(&timmer);
-		printf("%d일 %d분\n", t->tm_mday, read.elaTime);
-		if (ftell(fp) == sizeof(saveTime))
+		sum += read.elaTime;
+		count++;
+		if (ftell(fp) == sizeof(saveTime)) 
 			break;
 	}
+	printf("%d\n", sum / count);
 	printf("아무키나 누르시오\n");
 	getch();
 }
