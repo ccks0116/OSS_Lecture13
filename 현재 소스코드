@@ -3,33 +3,31 @@
 
 #include "stdafx.h"
 #include "stdlib.h"
-#include "windows.h"
+#include "windows.h"//Sleep(), Beep()를 사용하기위한 헤더파일
 #include "time.h"
-#include "conio.h" //_kbhit(),getch()를 사용하기위한 헤더파일
-
-void elpTime();
-void pTime();
-void keyListener();
-void setAlarm();
-void writeData();
-void readData();
-void statistics();
+#include "conio.h" //_kbhit(),getch()
 
 typedef struct SaveTime {  //구조체단위로 파일입출력함
-	int date;
-	int elaTime;
+	time_t date;
+	int elpTime;
 }saveTime;
 
 int c = 0; //clock()로 받은 값을 저장
 int m = 0, h = 0; // 경괴시간 분, 시
 int state = NULL; // 키입력 상태
 int endProgram = 1; //프로그램 종료
-
 int alarm = 3600;// 초로 환산한 알람시간
 
-
-
 #define ESC 27
+
+void elpTime();
+void pTime();
+void keyListener();
+void setAlarm();
+void writeData();
+void readData(saveTime *arr, int arrSize);
+void statistics();
+void checkElpTime();
 
 int main()
 {
@@ -42,7 +40,6 @@ int main()
 		pTime();
 		printf("0 도움말, ESC 종료.\n");
 		Sleep(50);
-
 	}
 
 	writeData(); //시간값 저장
@@ -50,7 +47,7 @@ int main()
 }
 
 void elpTime() {		//elapse time 경과시간
-	c = clock() / 100; //clock()는 1/1000초를 반환하므로 1초로 단위 변경
+	c = clock() / 1000; //clock()는 1/1000초를 반환하므로 1초로 단위 변경
 	m = (c / 60) % 60;
 	h = c / 3600;
 	if ((c % alarm) == 0) { //알람시간이 되면 비프음 출력
@@ -89,7 +86,7 @@ void keyListener() {
 			break;
 		case '0':
 			system("mode con:cols=50 lines=20");
-			printf("1. 알람시간 설정\n2. 뽀모도르 시간관리\n3. 컴퓨터 사용량 확인\nESC. 이전\n");
+			printf("1. 알람시간 설정\n2. 사용량 통계\n3. 컴퓨터 사용량 확인\nESC. 이전\n");
 			state = getch();
 			switch (state) {
 			case ESC:
@@ -101,7 +98,7 @@ void keyListener() {
 				statistics();
 				break;
 			case '3':
-				readData();
+				checkElpTime();
 				break;
 			}
 			system("mode con:cols=20 lines=5");
@@ -154,13 +151,18 @@ void writeData() { //시간 기록을 파일 입출력으로 저장
 	}
 	saveTime save; //구조체 단위로 저장하기위함 
 	save.date = time(NULL); //saveTime 속성 double date
-	save.elaTime = clock(); // int elaTime
+	save.elpTime = clock(); // int elaTime
 	fwrite(&save, sizeof(saveTime), 1, fp);
 	fclose(fp);
 }
 
-void readData() { //시간기록을 log.txt에서 읽어 들임
+void readData(saveTime arr[], int arrSize) { //로그파일에서 시간을 읽어 배열에 저장
 	FILE * fp;
+	saveTime read;
+	int i = 1, j = 0; //카운트 변수
+	int time1 = 0, time2 = 0; //시간 비교를 위한 변수
+	struct tm * t;
+	system("cls");
 
 	if ((fp = fopen("Log.txt", "r")) == NULL) {
 		printf("파일을 열 수 없습니다.\n처음 실행 시켰다면 프로그램 종료후 로그파일이 생성됩니다\n");
@@ -168,49 +170,54 @@ void readData() { //시간기록을 log.txt에서 읽어 들임
 		return;
 	}
 
-	saveTime read;
-	struct tm * t;
-	time_t timmer;
-	
+	fseek(fp, -sizeof(saveTime), SEEK_END); //Log.txt의 제의 뒷부분부터 구조체saveTime 단위만큼 뒤로 건너뜀
+	fread(&read, sizeof(saveTime), 1, fp);
+	arr[j] = read;
 
-	for (int i = 1; ; i++){
-		fseek(fp, -i*sizeof(saveTime), SEEK_END); //Log.txt의 제의 뒷부분부터 구조체saveTime 단위만큼 뒤로 건너뜀
+	while (ftell(fp) != sizeof(saveTime)) {
+		fseek(fp, -(i + 1)*sizeof(saveTime), SEEK_END); //Log.txt의 제의 뒷부분부터 구조체saveTime 단위만큼 뒤로 건너뜀
 		fread(&read, sizeof(saveTime), 1, fp);
-		timmer = (time_t)read.date;
-		t = localtime(&timmer);
-		printf("%d일 %d분\n", t->tm_mday, read.elaTime); //log파일이 비어있을때 에러가 난다 수정필요
-		if (ftell(fp) == sizeof(saveTime)) //파일 포인터가 앞부분에 도착하면 루프 종료
+		t = localtime(&arr[j].date);	time1 = t->tm_min; //날짜비교를위세 각각변수에 저장 ////////////////////////분으로 바꿔놨음 나중에 날짜로 바꿔야됨///////////
+		t = localtime(&read.date);		time2 = t->tm_min;
+		if (j == arrSize) {					//배열을 넘어가면 종료
 			break;
+		}
+		else if (time1 == time2) {  
+			arr[j].elpTime += read.elpTime; //날짜가 같으면 사용시간을 더함
+		}
+		else {
+			j = j + 1;
+			arr[j] = read;//날짜가 다르면 다음배열에 저장
+		}
+		i++;
 	}
-	printf("아무키나 누르시오\n");
+
+}
+
+void checkElpTime() {
+	system("mode con:cols=50 lines=50");
+	struct tm * t;
+	saveTime arr[30] = { {} };
+	printf("%--d\n", arr[0].date);
+	readData(arr, sizeof(arr) / sizeof(saveTime));
+	for (int i = 0; i < sizeof(arr) / sizeof(saveTime); i++) {
+		if (arr[i].date == 0)
+			break;
+		t = localtime(&arr[i].date);
+		printf("%2d일 사용시간 %6d\n", t->tm_min, arr[i].elpTime); //////////////////////////분으로 바꿔놨음 나중에 날짜로 바꿔야됨///////////
+	}
+	printf("아무키 입력시 종료\n");
 	getch();
 }
 
 void statistics() { //사용시간을 통계내는 함수 간략화가 필요하다
-	FILE * fp;
+	saveTime arr[7] = { {} };
 	int sum = 0;
-	int avg = 0;
-
-	if ((fp = fopen("Log.txt", "r")) == NULL) {
-		printf("파일을 열 수 없습니다.\n");
-		getch();
-		return;
+	readData(arr, sizeof(arr)/sizeof(saveTime));
+	for (int i = 0; i < sizeof(arr) / sizeof(saveTime); i++) {
+		sum += arr[i].elpTime;
 	}
-
-	saveTime read;
-	struct tm * t;
-	time_t timmer;
-	int count = 0;
-	for (int i = 1; i <= 7; i++){
-
-		fseek(fp, -i*sizeof(saveTime), SEEK_END); 
-		fread(&read, sizeof(saveTime), 1, fp);
-		sum += read.elaTime;
-		count++;
-		if (ftell(fp) == sizeof(saveTime)) 
-			break;
-	}
-	printf("%d\n", sum / count);
-	printf("아무키나 누르시오\n");
+	printf("7일간 평균 사용량 = %d", sum / 7);
+	printf("아무키 입력시 종료\n");
 	getch();
 }
