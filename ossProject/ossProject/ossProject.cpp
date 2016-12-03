@@ -119,7 +119,7 @@ void checkElpTime(); //30일간 사용량을 출력함
 void gotoxy(int x, int y);
 void TimePrint(int pos, int num);
 void ColonPrint(int num);
-void MapPrint();
+// void MapPrint(); // 사용 안함
 
 int main()
 {
@@ -143,7 +143,7 @@ void elpTime() {		//시작부터 종료까지 사용량 출력
 	int random[2] = { rand() % 100 + 1,rand() % 100 + 1 };
 	int a = 0;
 
-	c = clock() / 1000; //clock()는 1/1000초를 반환하므로 1초로 단위 변경 (전역변수)
+	c = (clock() / 1000) + 1; //clock()는 1/1000초를 반환하므로 1초로 단위 변경 (전역변수)
 	m = (c / 60) % 60; //분 (전역변수)
 	h = c / 3600; //시 (전역변수)
 	if ((c % alarm) == 0) { //전역변수로 설정한 알람시간이 되면 비프음 출력
@@ -180,7 +180,7 @@ void TimePrint(int pos, int num) // 현재시간을 디지털숫자로 표시하는 함수
 	{
 		for (x = 0; x < 3; x++)
 		{
-			gotoxy(sx[pos] + (x)* 2, y); // gotoxy()함수로 숫자 출력할 곳 조절
+			gotoxy(sx[pos] + (x) * 2, y); // gotoxy()함수로 숫자 출력할 곳 조절
 			if (number_[num][y][x] == 1) // 19번째 라인에 설정해둔 배열의 값이 1이면 눈에보이는 네모 표시 출력 0이면 안보이는 네모 출력
 				printf("■");
 			count++;
@@ -263,8 +263,8 @@ void setAlarm() {		//알람함수
 	system("cls");
 	printf("알람 설정 메뉴입니다.(기본 1시간마다 알람)\n");
 	printf("----------------------\n");
-	while (1){
-		while (1){  //알람 시 설정
+	while (1) {
+		while (1) {  //알람 시 설정
 			printf("시간을 설정해 주십시오( 0 ~ 24 )\n");
 			scanf("%d", &alarmH);
 			if (alarmH > 24) {
@@ -273,7 +273,7 @@ void setAlarm() {		//알람함수
 			}
 			break;
 		}
-		while (1){ // 알람 분 설정
+		while (1) { // 알람 분 설정
 			printf("분을 설정해 주십시오( 0 ~ 59 )\n");
 			scanf("%d", &alarmM);
 			if (alarmH > 59) {
@@ -325,7 +325,7 @@ void readData(saveTime arr[], int arrSize) {	//로그파일에서 데이터를 최근값으로 
 	arr[j] = read;							//읽어들인 값으로 일단 첫번째배열을 채운다.
 
 	while (ftell(fp) != sizeof(saveTime)) {
-		fseek(fp, -(i + 1)*sizeof(saveTime), SEEK_END); //파일의 끝에서 saveTime의 크기만큼 i+1번 뒤로 이동시킨다. (최근 저장된순으로 읽어들이기 위함)
+		fseek(fp, -(i + 1) * sizeof(saveTime), SEEK_END); //파일의 끝에서 saveTime의 크기만큼 i+1번 뒤로 이동시킨다. (최근 저장된순으로 읽어들이기 위함)
 		fread(&read, sizeof(saveTime), 1, fp);
 		t = localtime(&arr[j].date);	time1 = t->tm_min; //날짜비교를위세 각각변수에 저장 ////////////////////////분으로 바꿔놨음 나중에 날짜(mday)로 바꿔야됨///////////
 		t = localtime(&read.date);		time2 = t->tm_min;
@@ -333,7 +333,7 @@ void readData(saveTime arr[], int arrSize) {	//로그파일에서 데이터를 최근값으로 
 			break;
 		}
 		else if (time1 == time2) {  //날짜가 같으면 사용시간을 더함
-			arr[j].elpTime += read.elpTime; 
+			arr[j].elpTime += read.elpTime;
 		}
 		else {
 			j = j + 1;
@@ -353,7 +353,7 @@ void checkElpTime() {	//30일간 사용량을 출력함
 		if (arr[i].date == 0)
 			break;
 		t = localtime(&arr[i].date); //읽어들인 시간을 현지시간으로 변경
-		printf("%2d일 사용시간 %10d초\n", t->tm_min, arr[i].elpTime/1000); //////////////////////////분으로 바꿔놨음 나중에 날짜로 바꿔야됨///////////
+		printf("%2d일 사용시간 %10d초\n", t->tm_min, arr[i].elpTime / 1000); //////////////////////////분으로 바꿔놨음 나중에 날짜로 바꿔야됨///////////
 	}
 	printf("아무키 입력시 종료\n");
 	getch();
@@ -362,7 +362,7 @@ void checkElpTime() {	//30일간 사용량을 출력함
 void statistics() { //사용시간을 통계내는 함수 간략화가 필요하다
 	saveTime arr[7] = { {} };
 	int sum = 0;
-	readData(arr, sizeof(arr)/sizeof(saveTime));
+	readData(arr, sizeof(arr) / sizeof(saveTime));
 	for (int i = 0; i < sizeof(arr) / sizeof(saveTime); i++) {
 		sum += arr[i].elpTime;
 	}
