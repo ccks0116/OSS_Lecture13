@@ -364,7 +364,8 @@ void checkElpTime() {   //30일간 사용량을 출력함
 	fin.open("Log.txt");
 
 	if (fin.fail()) { //파일을 "append"형(파일끝에 추가하여 씀)으로 열고 오류가 발생하면 리턴
-		printf("파일을 열 수 없습니다.\n");
+		printf("Log파일이 없습니다.\n프로그램을 정상종료 후 재실행해주세요.");
+		getch();
 		return;
 	}
 
@@ -408,7 +409,8 @@ void statistics() { //사용시간을 통계내는 함수 간략화가 필요하다
 	fin.open("Log.txt");
 
 	if (fin.fail()) { //파일을 "append"형(파일끝에 추가하여 씀)으로 열고 오류가 발생하면 리턴
-		printf("\n\n\t파일을 열 수 없습니다.");
+		printf("Log파일이 없습니다.\n프로그램을 정상종료 후 재실행해주세요.");
+		getch();
 		return;
 	}
 
