@@ -14,15 +14,19 @@
 
 int main(void)
 {
+	srand(time(NULL));
+	int random = rand();
+	random = random % 9;
+
 	PlaySound(TEXT(Third_Run), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	while (1)
 	{
 		int atime;
 
-		printf("알림을 끄시겠습니까?(0을 입력하시오)\n");
+		printf("알림을 끄시겠습니까?(0~9의 임의수 값)\n");
 		scanf_s("%d", &atime);
-		if (atime == 0)
+		if (atime == random)
 		{
 			PlaySound(NULL, 0, 0);
 			Sleep(1000);
