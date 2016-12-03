@@ -1,0 +1,41 @@
+﻿빌드 시작: 2016-12-03 오후 9:38:35
+     1>2 노드의 "C:\Users\ww\Desktop\project\visual studio\ossProject\ossProject\ossProject.vcxproj" 프로젝트(Build 대상)입니다.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\ossProject.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ossProject.cpp
+         ossProject.cpp
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(208): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\time.inl(112) : 'localtime' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(215): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(224): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(253): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(283) : 'scanf' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(262): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(283) : 'scanf' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(282): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(211) : 'fopen' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(301): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\stdio.h(211) : 'fopen' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(303): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(307): warning C4146: 단항 빼기 연산자가 부호 없는 형식에 적용되었습니다. 결과는 역시 unsigned입니다.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(314): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\time.inl(112) : 'localtime' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(315): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\time.inl(112) : 'localtime' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(339): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\time.inl(112) : 'localtime' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(343): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+     1>c:\users\ww\desktop\project\visual studio\ossproject\ossproject\ossproject.cpp(355): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _getch. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\conio.h(131) : 'getch' 선언을 참조하십시오.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ww\Desktop\project\visual studio\ossProject\Debug\ossProject.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ww\Desktop\project\visual studio\ossProject\Debug\ossProject.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ww\Desktop\project\visual studio\ossProject\Debug\ossProject.lib" /MACHINE:X86 Debug\ossProject.obj
+         Debug\stdafx.obj
+         ossProject.vcxproj -> C:\Users\ww\Desktop\project\visual studio\ossProject\Debug\ossProject.exe
+     1>"C:\Users\ww\Desktop\project\visual studio\ossProject\ossProject\ossProject.vcxproj" 프로젝트를 빌드했습니다(Build 대상).
+
+빌드했습니다.
+
+경과 시간: 00:00:01.46
