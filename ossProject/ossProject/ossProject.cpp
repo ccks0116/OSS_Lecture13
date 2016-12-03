@@ -6,8 +6,12 @@
 #include "windows.h"//Sleep(), Beep()를 사용하기위한 헤더파일
 #include "time.h"
 #include "conio.h" //_kbhit(),getch()
+#include "MMSystem.h" // PlaySound() 함수 실행하기 위한 헤더파일
+#pragma comment(lib,"Winmm.lib")
+
 #define ESC 27
 #define MAX 10
+#define Third_Run "C:\\alarm.wav"
 
 typedef struct SaveTime {  //데이터 저장시 구조체단위로 파일입출력하기위한 구조체
 	time_t date;
@@ -119,6 +123,7 @@ void MapPrint();
 
 int main()
 {
+	srand((unsigned)time(NULL));
 	system("mode con:cols=40 lines=10");// con:cols=50 : 가로 길 lines=20 : 세로 길
 
 	while (endProgram) {
@@ -135,20 +140,31 @@ int main()
 }
 
 void elpTime() {		//시작부터 종료까지 사용량 출력
+	int random[2] = { rand() % 100 + 1,rand() % 100 + 1 };
+	int a = 0;
+
 	c = clock() / 1000; //clock()는 1/1000초를 반환하므로 1초로 단위 변경 (전역변수)
 	m = (c / 60) % 60; //분 (전역변수)
 	h = c / 3600; //시 (전역변수)
 	if ((c % alarm) == 0) { //전역변수로 설정한 알람시간이 되면 비프음 출력
-		printf("아무키 입력시 종료\n");
-		for (int i = 0; i < 5; i++){ //
-			Beep(262, 100);
-			Beep(330, 100);
-			Beep(392, 100);
-			Beep(524, 100);
-			if (_kbhit() != 0) { //키입력시 종료
-				break;
-			}
+
+		PlaySound(TEXT(Third_Run), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); // wav 파일 재생함수
+
+		printf("알람을 끄고싶으면 정답을 입력하세요!\n");
+		printf("%d + %d = ?\n", random[0], random[1]);
+		printf("정답 입력= ");
+		scanf("%d", &a);
+
+		while (!((random[0] + random[1]) == a)) // 정답 맞출때까지 반복
+		{
+			system("cls");
+			printf("틀렸습니다. 다시 입력하세요\n");
+			printf("%d + %d = ?\n", random[0], random[1]);
+			printf("? 입력= ");
+			scanf("%d", &a);
 		}
+		printf("정답입니다! 알람을 종료합니다.\n");
+		PlaySound(NULL, 0, 0);
 	}
 	TimePrint(0, h / 10);
 	TimePrint(1, h % 10);
