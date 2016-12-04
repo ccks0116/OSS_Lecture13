@@ -123,6 +123,7 @@ void pomodoro();
 int main()
 {
 	srand((unsigned)time(NULL));
+	system("title 컴퓨터 사용시간 관리");
 	system("mode con:cols=40 lines=10");// con:cols=50 : 가로 길 lines=20 : 세로 길
 
 	while (endProgram) {
@@ -480,20 +481,27 @@ void pomodoro() {
 	int state = 0, s = 1800;
 	while (state != ESC) {
 		system("cls");
-		printf("뽀모도로 시간관리기법\n");
-		printf("-----------------------------\n");
-		printf("현재 뽀모도로 사이클 : %d회\n", cycle);
+		printf("   ┏━━━━━━━━━━━━━━━━━━━━━┓\n");
+		printf("   ┃         뽀모도로 시간 관리기법          ┃\n");
+		printf("   ┗━━━━━━━━━━━━━━━━━━━━━┛\n");
+		printf("   ┏━━━━━━━━━━━━━━━━━━━━━┓\n");
+		printf("   ┃        현재 뽀모도로 사이클 : %d회       ┃\n", cycle);
+		printf("   ┗━━━━━━━━━━━━━━━━━━━━━┛\n");
 		if (s < 300) {
-			printf("남은 휴식시간 %2d:%2d\n", s / 60, s % 60);
+			printf("   ┏━━━━━━━━━━━━━━━━━━━━┓\n");
+			printf("   ┃        남은 휴식시간 %2d:%2d         ┃\n", s / 60, s % 60);
+			printf("   ┗━━━━━━━━━━━━━━━━━━━━┛\n");
 		}
 		else if (s == 0){
 			cycle++;
 			s = 1800;
 		}
 		else{
-			printf("남은시간 %2d:%2d\n", (s / 60) - 5, s % 60);
+			printf("        ┏━━━━━━━━━━━━━━━┓\n");
+			printf("        ┃      남은시간 [%2d:%2d]       ┃\n", (s / 60) - 5, s % 60);
+			printf("        ┗━━━━━━━━━━━━━━━┛\n");
 		}
-		printf("\nESC누르면 종료\n");
+		printf("\n         ESC 종료\n");
 		s--;
 		Sleep(1000);
 		if (_kbhit() != 0){
