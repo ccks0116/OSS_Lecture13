@@ -1,0 +1,5 @@
+#include <windows.h>
+
+system("mode con:cols=50 lines=20");
+// con:cols=50 : 가로 길
+// lines=20 : 세로 길
