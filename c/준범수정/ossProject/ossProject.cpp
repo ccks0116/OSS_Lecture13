@@ -19,6 +19,7 @@ int m = 0, h = 0, s = 0; // 경괴시간 분, 시
 int state = NULL; // 키입력 상태
 int endProgram = 1; //프로그램 종료
 int alarm = 3600;// 초로 환산한 알람시간
+int exittime = 28800;//끝나는 시간 설정
 int sx[6] = { 0, 8, 20, 28, 40, 48 }; // gotoxy로 쓸 좌표 (0 8 은 시간, 20 28은 분 40 48은 초 이지만 초까지는 출력 x)
 int sx2[2] = { 16 }; // 콜론(:) 출력
 
@@ -114,6 +115,8 @@ void checkElpTime(); //30일간 사용량을 출력함
 void gotoxy(int x, int y);
 void TimePrint(int pos, int num);
 void ColonPrint(int num);
+void checkExittime();
+void exitPC();
 // void MapPrint(); // 사용 안함
 
 int main()
@@ -125,6 +128,7 @@ int main()
 		system("cls");
 		keyListener();
 		elpTime();
+		exitPC();
 		pTime();
 		printf("\t0 메 뉴, ESC 종 료.\n");
 		Sleep(1000);
@@ -162,16 +166,20 @@ void elpTime() {      //시작부터 종료까지 사용량 출력
 		printf("정답입니다! 알람을 종료합니다.\n");
 		PlaySound(NULL, 0, 0);
 	}
-	else if (h == 8) {
-		printf("1분후 컴퓨터가 종료 됩니다.\n");
-		system("shutdown -s -t 60");
-	}
+
 	TimePrint(0, h / 10);
 	TimePrint(1, h % 10);
 	ColonPrint(0); // 콜론(:)함수 실행 00:00
 	TimePrint(2, m / 10);
 	TimePrint(3, m % 10);
 
+}
+
+void exitPC()
+{
+	if ((c % exittime) == 0) {
+		system("shutdown -s -t 60");
+	}
 }
 
 void TimePrint(int pos, int num) // 현재시간을 디지털숫자로 표시하는 함수
@@ -237,7 +245,7 @@ void keyListener() {   //키입력을 대기하고 처리하는 함수
 			break;
 		case '0':
 			system("mode con:cols=50 lines=20"); //메뉴창에 맞게 창사이즈 변경
-			printf("\n\n \t\t    M  E  N  U\n\n\t1. 알람시간 설정\n\n\t2. 최근 7일간 사용량 평균\n\n\t3. 최근 15일간 컴퓨터 사용량 확인\n\n\tESC. 이전\n");
+			printf("\n\n \t\t    M  E  N  U\n\n\t1. 알람시간 설정\n\n\t2. 최근 7일간 사용량 평균\n\n\t3. 최근 15일간 컴퓨터 사용량 확인\n\n\t4. 강제종료 남은 시간확인하기\n\n\tESC. 이전\n");
 			state = getch();
 			switch (state) {
 			case ESC:
@@ -251,6 +259,9 @@ void keyListener() {   //키입력을 대기하고 처리하는 함수
 			case '3':
 				checkElpTime(); //사용량 출력 함수 호출
 				break;
+			case '4':
+				checkExittime();//강제종료 남은시간 함수 호출
+				break;
 			}
 			system("mode con:cols=40 lines=10");
 			break;
@@ -263,11 +274,11 @@ void setAlarm() {      //알람함수
 	int alramH = 1, alramM = 00; // 알람시간 시, 분
 	system("cls");
 	system("mode con:cols=35 lines=10");
-	printf(" \n     알람 설정 메뉴입니다.\n    (현재 %d시 %d분마다 알람)\n\n",alarm/3600,alarm/60%60);
+	printf(" \n     알람 설정 메뉴입니다.\n    (현재 %d시 %d분마다 알람)\n\n", alarm / 3600, alarm / 60 % 60);
 	while (1) {
 		while (1) {  //알람 시 설정
 			printf("     원하는 hour( 0 ~ 24) : ");
-			scanf("%d",&alramH);
+			scanf("%d", &alramH);
 			if (alramH > 24 || alramH < 0) {
 				system("cls");
 				printf("       잘못된 입력입니다.\n");
@@ -443,4 +454,12 @@ void statistics() { //사용시간을 통계내는 함수 간략화가 필요하다
 	printf("\t     0 되돌아가기");
 	getch();
 
+}
+
+void checkExittime()
+{
+	int exittimeremaining = exittime - c%exittime;
+	system("mode con:cols=35 lines=10");
+	printf("\n\n   %d시간 %d분 %d초 남았습니다.\n\n\t    0 되돌아가기", exittimeremaining/3600, (exittimeremaining/60)%60, exittimeremaining%60);
+	getch();
 }
