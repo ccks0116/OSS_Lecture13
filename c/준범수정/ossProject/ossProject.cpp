@@ -176,13 +176,6 @@ void elpTime() {      //시작부터 종료까지 사용량 출력
 
 }
 
-void exitPC()
-{
-	if ((c % exittime) == 0) {
-		system("shutdown -s -t 60");
-	}
-}
-
 void TimePrint(int pos, int num) // 현재시간을 디지털숫자로 표시하는 함수
 {
 	int x = 0, y = 0, count = 0;
@@ -460,12 +453,26 @@ void statistics() { //사용시간을 통계내는 함수 간략화가 필요하다
 
 }
 
-void checkExittime()
+void exitPC()
 {
-	int exittimeremaining = exittime - c%exittime;
-	system("mode con:cols=35 lines=10");
-	printf("\n\n   %d시간 %d분 %d초 남았습니다.\n\n\t    0 되돌아가기", exittimeremaining/3600, (exittimeremaining/60)%60, exittimeremaining%60);
-	getch();
+	if (c == exittime) {
+		system("shutdown -s -t 60");
+	}
+}
+
+void checkExittime() {
+	int exittimeremaining = 0;
+	int s;
+	while (state != ESC) {
+		s = clock()/1000;
+		exittimeremaining = exittime - s;
+		system("mode con:cols=35 lines=10");
+		printf("\n\n   %d시간 %d분 %d초 남았습니다.\n\n\t    0 되돌아가기", exittimeremaining / 3600, (exittimeremaining / 60) % 60, exittimeremaining % 60);
+		Sleep(1000);
+		if (_kbhit() != 0){
+			state = getch();
+		}
+	}
 }
 
 void pomodoro() {
