@@ -162,6 +162,10 @@ void elpTime() {      //시작부터 종료까지 사용량 출력
 		printf("정답입니다! 알람을 종료합니다.\n");
 		PlaySound(NULL, 0, 0);
 	}
+	else if (h == 8) {
+		printf("1분후 컴퓨터가 종료 됩니다.\n");
+		system("shutdown -s -t 60");
+	}
 	TimePrint(0, h / 10);
 	TimePrint(1, h % 10);
 	ColonPrint(0); // 콜론(:)함수 실행 00:00
