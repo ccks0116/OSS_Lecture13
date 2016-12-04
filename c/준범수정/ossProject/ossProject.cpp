@@ -123,6 +123,7 @@ void pomodoro();
 int main()
 {
 	srand((unsigned)time(NULL));
+	system("title 컴퓨터 사용시간 관리");
 	system("mode con:cols=40 lines=10");// con:cols=50 : 가로 길 lines=20 : 세로 길
 
 	while (endProgram) {
