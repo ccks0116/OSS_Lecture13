@@ -468,7 +468,7 @@ void checkExittime() {
 		s = clock()/1000;
 		exittimeremaining = exittime - s;
 		system("mode con:cols=35 lines=10");
-		printf("\n\n   %d시간 %d분 %d초 남았습니다.\n\n\t    0 되돌아가기", exittimeremaining / 3600, (exittimeremaining / 60) % 60, exittimeremaining % 60);
+		printf("\n\n     %d시간 %d분 %d초 남았습니다.\n\n\t   ESC 되돌아가기", exittimeremaining / 3600, (exittimeremaining / 60) % 60, exittimeremaining % 60);
 		Sleep(1000);
 		if (_kbhit() != 0){
 			state = getch();
@@ -482,14 +482,14 @@ void pomodoro() {
 	while (state != ESC) {
 		system("cls");
 		printf("   ┏━━━━━━━━━━━━━━━━━━━━━┓\n");
-		printf("   ┃         뽀모도로 시간 관리기법          ┃\n");
+		printf("               뽀모도로 시간 관리기법\n");
 		printf("   ┗━━━━━━━━━━━━━━━━━━━━━┛\n");
 		printf("   ┏━━━━━━━━━━━━━━━━━━━━━┓\n");
-		printf("   ┃        현재 뽀모도로 사이클 : %d회       ┃\n", cycle);
+		printf("              현재 뽀모도로 사이클 : %d회\n", cycle);
 		printf("   ┗━━━━━━━━━━━━━━━━━━━━━┛\n");
 		if (s < 300) {
 			printf("   ┏━━━━━━━━━━━━━━━━━━━━┓\n");
-			printf("   ┃        남은 휴식시간 %2d:%2d         ┃\n", s / 60, s % 60);
+			printf("              남은 휴식시간 %2d:%2d\n", s / 60, s % 60);
 			printf("   ┗━━━━━━━━━━━━━━━━━━━━┛\n");
 		}
 		else if (s == 0){
@@ -498,7 +498,7 @@ void pomodoro() {
 		}
 		else{
 			printf("        ┏━━━━━━━━━━━━━━━┓\n");
-			printf("        ┃      남은시간 [%2d:%2d]       ┃\n", (s / 60) - 5, s % 60);
+			printf("                남은시간 [%2d:%2d]\n", (s / 60) - 5, s % 60);
 			printf("        ┗━━━━━━━━━━━━━━━┛\n");
 		}
 		printf("\n         ESC 종료\n");
