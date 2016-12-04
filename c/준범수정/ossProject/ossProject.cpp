@@ -237,7 +237,7 @@ void keyListener() {   //키입력을 대기하고 처리하는 함수
 			break;
 		case '0':
 			system("mode con:cols=50 lines=20"); //메뉴창에 맞게 창사이즈 변경
-			printf("\n\n \t\t    M  E  N  U\n\n\t1. 알람시간 설정\n\n\t2. 사용량 통계\n\n\t3. 컴퓨터 사용량 확인\n\n\tESC. 이전\n");
+			printf("\n\n \t\t    M  E  N  U\n\n\t1. 알람시간 설정\n\n\t2. 최근 7일간 사용량 평균\n\n\t3. 최근 15일간 컴퓨터 사용량 확인\n\n\tESC. 이전\n");
 			state = getch();
 			switch (state) {
 			case ESC:
