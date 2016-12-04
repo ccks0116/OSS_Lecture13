@@ -117,6 +117,7 @@ void TimePrint(int pos, int num);
 void ColonPrint(int num);
 void checkExittime();
 void exitPC();
+void pomodoro();
 // void MapPrint(); // 사용 안함
 
 int main()
@@ -245,7 +246,7 @@ void keyListener() {   //키입력을 대기하고 처리하는 함수
 			break;
 		case '0':
 			system("mode con:cols=50 lines=20"); //메뉴창에 맞게 창사이즈 변경
-			printf("\n\n \t\t    M  E  N  U\n\n\t1. 알람시간 설정\n\n\t2. 최근 7일간 사용량 평균\n\n\t3. 최근 15일간 컴퓨터 사용량 확인\n\n\t4. 강제종료 남은 시간확인하기\n\n\tESC. 이전\n");
+			printf("\n\n \t\t    M  E  N  U\n\n\t1. 알람시간 설정\n\n\t2. 최근 7일간 사용량 평균\n\n\t3. 최근 15일간 컴퓨터 사용량 확인\n\n\t4. 강제종료 남은 시간확인하기\n\n\t5. 뽀모도르 시간관리\n\n\tESC. 이전\n");
 			state = getch();
 			switch (state) {
 			case ESC:
@@ -261,6 +262,9 @@ void keyListener() {   //키입력을 대기하고 처리하는 함수
 				break;
 			case '4':
 				checkExittime();//강제종료 남은시간 함수 호출
+				break;
+			case '5':
+				pomodoro();
 				break;
 			}
 			system("mode con:cols=40 lines=10");
@@ -462,4 +466,31 @@ void checkExittime()
 	system("mode con:cols=35 lines=10");
 	printf("\n\n   %d시간 %d분 %d초 남았습니다.\n\n\t    0 되돌아가기", exittimeremaining/3600, (exittimeremaining/60)%60, exittimeremaining%60);
 	getch();
+}
+
+void pomodoro() {
+	int cycle = 0;
+	int state = 0, s = 1800;
+	while (state != ESC) {
+		system("cls");
+		printf("뽀모도로 시간관리기법\n");
+		printf("-----------------------------\n");
+		printf("현재 뽀모도로 사이클 : %d회\n", cycle);
+		if (s < 300) {
+			printf("남은 휴식시간 %2d:%2d\n", s / 60, s % 60);
+		}
+		else if (s == 0){
+			cycle++;
+			s = 1800;
+		}
+		else{
+			printf("남은시간 %2d:%2d\n", (s / 60) - 5, s % 60);
+		}
+		printf("\nESC누르면 종료\n");
+		s--;
+		Sleep(1000);
+		if (_kbhit() != 0){
+			state = getch();
+		}
+	}
 }
